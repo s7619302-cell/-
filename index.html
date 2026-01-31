@@ -1,0 +1,554 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>淡墨輕煙 - 公會首頁</title>
+    <link href="https://fonts.googleapis.com/css2?family=Noto+Serif+TC:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --main-bg-color: #0a0a0a;
+            --accent-color: #c7b299; /* 淡金色 */
+            --accent-hover: #e6d5c1;
+            --text-color: #e0e0e0;
+            --card-bg: rgba(30, 35, 45, 0.85); /* 卡片背景微透明 */
+            --section-bg: #0f1012; /* 內容區塊深色背景 */
+        }
+
+        body, html {
+            margin: 0;
+            padding: 0;
+            font-family: 'Noto Serif TC', serif;
+            background-color: var(--main-bg-color);
+            color: var(--text-color);
+            scroll-behavior: smooth; /* 點擊導覽列時平滑捲動 */
+        }
+
+        /* --- 導覽列 --- */
+        header {
+            position: fixed;
+            top: 0;
+            width: 100%;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            padding: 20px 50px;
+            background: linear-gradient(to bottom, rgba(0,0,0,0.9), transparent);
+            z-index: 1000;
+            box-sizing: border-box;
+            transition: background 0.3s;
+        }
+
+        header:hover {
+            background: rgba(0,0,0,0.95);
+        }
+
+        .logo-text {
+            font-size: 1.5em;
+            font-weight: bold;
+            color: var(--accent-color);
+            letter-spacing: 2px;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.8);
+        }
+
+        nav ul {
+            list-style: none;
+            display: flex;
+            gap: 30px;
+            margin: 0;
+            padding: 0;
+        }
+
+        nav a {
+            text-decoration: none;
+            color: var(--text-color);
+            font-weight: bold;
+            font-size: 1.1em;
+            transition: color 0.3s;
+            text-shadow: 1px 1px 2px rgba(0,0,0,1);
+        }
+
+        nav a:hover {
+            color: var(--accent-color);
+        }
+
+        /* --- 主視覺區塊 (Video Background) --- */
+        .hero-banner {
+            height: 100vh;
+            width: 100%;
+            position: relative;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden; /* 防止影片溢出 */
+        }
+
+        /* 背景影片樣式 */
+        .video-bg {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            object-fit: cover; /* 確保影片填滿畫面不變形 */
+            z-index: 0;
+        }
+
+        /* 遮罩層：讓影片變暗，使文字更清晰 */
+        .hero-overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.45); 
+            z-index: 1;
+            background: radial-gradient(circle, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.8) 90%);
+        }
+
+        /* 英雄區塊內容 */
+        .hero-content {
+            position: relative;
+            z-index: 2;
+            text-align: center;
+            width: 100%;
+            padding: 0 20px;
+            box-sizing: border-box;
+            margin-bottom: 80px; /* 稍微往上調 */
+        }
+
+        /* 標題圖片 (書法字) */
+        .main-title-img {
+            max-width: 700px;
+            width: 80%;
+            height: auto;
+            filter: drop-shadow(0px 0px 15px rgba(0,0,0,0.9));
+            animation: fadeIn 2s ease-in-out;
+        }
+
+        .hero-subtitle {
+            font-size: 1.6em;
+            color: var(--accent-color);
+            margin-top: 20px;
+            text-shadow: 2px 2px 8px rgba(0,0,0,1);
+            letter-spacing: 8px;
+            border-top: 1px solid rgba(199, 178, 153, 0.5);
+            display: inline-block;
+            padding-top: 20px;
+            animation: slideUp 2s ease-out;
+        }
+
+        /* --- 內容區塊通用設定 --- */
+        .content-section {
+            padding: 100px 10%;
+            background-color: var(--section-bg);
+            border-top: 1px solid #333;
+            position: relative;
+        }
+
+        .section-title {
+            font-size: 2.5em;
+            color: var(--accent-color);
+            text-align: center;
+            margin-bottom: 60px;
+            position: relative;
+            letter-spacing: 5px;
+        }
+
+        /* 標題下方的裝飾線 */
+        .section-title::after {
+            content: '❖';
+            display: block;
+            font-size: 0.6em;
+            color: #555;
+            margin-top: 15px;
+        }
+
+        /* --- 公會簡介 --- */
+        .intro-text {
+            font-size: 1.25em;
+            line-height: 2;
+            text-align: center;
+            max-width: 800px;
+            margin: 0 auto;
+            color: #ccc;
+        }
+
+        .intro-text p {
+            margin-bottom: 30px;
+        }
+
+        /* --- 成員介紹網格 --- */
+        .members-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+            gap: 40px;
+            max-width: 1200px;
+            margin: 0 auto;
+        }
+
+        .member-card {
+            background: var(--card-bg);
+            border: 1px solid rgba(199, 178, 153, 0.2);
+            padding: 40px 20px;
+            text-align: center;
+            border-radius: 4px;
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .member-card:hover {
+            transform: translateY(-10px);
+            border-color: var(--accent-color);
+            box-shadow: 0 15px 30px rgba(0,0,0,0.6);
+            background: rgba(40, 45, 55, 0.95);
+        }
+
+        .member-avatar {
+            width: 110px;
+            height: 110px;
+            background-color: #222;
+            border-radius: 50%;
+            margin: 0 auto 20px;
+            border: 2px solid var(--accent-color);
+            /* 若無圖片，使用預設背景 */
+            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="%23555" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>');
+            background-size: 60%;
+            background-position: center;
+            background-repeat: no-repeat;
+        }
+
+        .member-name {
+            font-size: 1.5em;
+            color: var(--accent-color);
+            margin: 10px 0 5px;
+            font-weight: bold;
+        }
+
+        .member-title {
+            font-size: 0.9em;
+            color: #888;
+            font-style: italic;
+            margin-bottom: 15px;
+        }
+
+        .member-rank {
+            display: inline-block;
+            padding: 5px 15px;
+            border: 1px solid #555;
+            font-size: 0.9em;
+            color: #ddd;
+            border-radius: 20px;
+        }
+
+        .member-card:hover .member-rank {
+            border-color: var(--accent-color);
+            color: var(--accent-color);
+        }
+
+        /* --- 報名表單 --- */
+        .signup-wrapper {
+            background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('image_0.png'); /* 若原背景圖還在，可當作表單背景，若無可刪除 */
+            background-size: cover;
+            background-position: center;
+            padding: 50px;
+            border-radius: 10px;
+            max-width: 700px;
+            margin: 0 auto;
+            border: 1px solid #333;
+            box-shadow: 0 0 50px rgba(0,0,0,0.5);
+        }
+
+        .form-group {
+            margin-bottom: 30px;
+            text-align: left;
+        }
+
+        .form-label {
+            display: block;
+            margin-bottom: 10px;
+            color: var(--accent-color);
+            font-size: 1.1em;
+            font-weight: bold;
+        }
+
+        .form-input, .form-select {
+            width: 100%;
+            padding: 15px;
+            background-color: rgba(10, 10, 10, 0.8);
+            border: 1px solid #444;
+            color: var(--text-color);
+            border-radius: 4px;
+            box-sizing: border-box;
+            font-family: inherit;
+            font-size: 1em;
+            transition: border-color 0.3s;
+        }
+        
+        .form-input:focus, .form-select:focus {
+            outline: none;
+            border-color: var(--accent-color);
+            box-shadow: 0 0 10px rgba(199, 178, 153, 0.2);
+        }
+
+        .submit-btn {
+            width: 100%;
+            padding: 18px;
+            background-color: var(--accent-color);
+            color: #0a0a0a;
+            border: none;
+            font-size: 1.2em;
+            font-weight: bold;
+            cursor: pointer;
+            transition: all 0.3s;
+            font-family: inherit;
+            letter-spacing: 3px;
+            border-radius: 4px;
+        }
+
+        .submit-btn:hover {
+            background-color: var(--accent-hover);
+            transform: scale(1.02);
+        }
+
+        /* --- 頁尾 --- */
+        footer {
+            background-color: #050505;
+            padding: 40px;
+            text-align: center;
+            color: #666;
+            font-size: 0.9em;
+            border-top: 1px solid #222;
+        }
+
+        /* 動畫定義 */
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+        @keyframes slideUp {
+            from { opacity: 0; transform: translateY(20px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* --- RWD 響應式調整 --- */
+        @media (max-width: 768px) {
+            header {
+                padding: 15px 20px;
+                flex-direction: column;
+            }
+            
+            nav ul {
+                margin-top: 15px;
+                gap: 15px;
+                font-size: 0.9em;
+            }
+
+            .main-title-img {
+                width: 95%;
+            }
+
+            .hero-subtitle {
+                font-size: 1.2em;
+                letter-spacing: 3px;
+            }
+
+            .section-title {
+                font-size: 2em;
+            }
+
+            .content-section {
+                padding: 60px 5%;
+            }
+
+            .signup-wrapper {
+                padding: 20px;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <div class="logo-text">淡墨輕煙</div>
+        <nav>
+            <ul>
+                <li><a href="#hero">首頁</a></li>
+                <li><a href="#intro">公會簡介</a></li>
+                <li><a href="#members">俠客名冊</a></li>
+                <li><a href="#dungeon">副本報名</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <section id="hero" class="hero-banner">
+        <video class="video-bg" autoplay muted loop playsinline poster="">
+            <source src="bg_video.mp4" type="video/mp4">
+            您的瀏覽器不支援影片標籤，建議使用 Chrome 或 Edge 瀏覽。
+        </video>
+
+        <div class="hero-overlay"></div>
+
+        <div class="hero-content">
+            <img src="image_1.png" alt="淡墨輕煙" class="main-title-img">
+            <h2 class="hero-subtitle">以武會友，快意江湖</h2>
+        </div>
+    </section>
+
+    <section id="intro" class="content-section">
+        <h2 class="section-title">公會簡介</h2>
+        <div class="intro-text">
+            <p>「淡墨輕煙」，取自江湖之遠，非淡泊無以明志，非寧靜無以致遠。<br>我們匯聚四方俠客，不問出身，只求志同道合。</p>
+            <p>在這裡，我們共闖百業副本，研習武學，亦或是在燕雲大地策馬奔騰，共賞長河落日。<br>我們重視每一位成員的體驗，互助互信，共同譜寫屬於我們的江湖傳奇。</p>
+            <p style="color: var(--accent-color); font-weight: bold; font-size: 1.2em; margin-top: 40px;">
+                劍起江湖嘯恩仇，墨染輕煙畫春秋。
+            </p>
+        </div>
+    </section>
+
+    <section id="members" class="content-section">
+        <h2 class="section-title">俠客名冊</h2>
+        
+        <div id="members-container" class="members-grid">
+            <p style="text-align:center; width:100%; color:#888;">正在聯繫江湖探子獲取名冊...</p>
+        </div>
+
+        <div id="error-msg" style="color: #ff6b6b; text-align: center; margin-top: 20px; display: none; background: rgba(0,0,0,0.8); padding: 15px; border: 1px solid red;"></div>
+
+        <script>
+            // ★★★ 請務必確認這裡換成了「發布到網路」的 CSV 連結 ★★★
+            // 連結結尾通常是 output=csv
+            const sheetCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT_zToofqTDRekqbDrXa4zxokGNBymqHmshOA0MzmLmxXvD7LSuzqpCoeAtcmRujwdXb_IEKCfSriIC/pub?gid=0&single=true&output=csv'; 
+
+            function parseCSV(str) {
+                const rows = str.trim().split(/\r?\n/); // 兼容不同系統的換行符號
+                const membersContainer = document.getElementById('members-container');
+                membersContainer.innerHTML = ''; 
+
+                console.log("讀取到的行數:", rows.length); // 除錯用
+
+                // 從第 1 筆開始 (跳過標題)
+                for (let i = 1; i < rows.length; i++) {
+                    // 處理逗號分隔，但忽略引號內的逗號 (更強大的分割法)
+                    // 如果這行太複雜，暫時假設沒有逗號在名字裡
+                    const row = rows[i].split(',');
+
+                    if (row.length < 2) continue;
+
+                    // 欄位對應 (請依據您的試算表調整數字 0, 1, 2)
+                    // 0 = A欄, 1 = B欄, 2 = C欄
+                    const name = row[0] ? row[0].replace(/['"]+/g, '').trim() : '未命名';
+                    const title = row[1] ? row[1].replace(/['"]+/g, '').trim() : '無稱號';
+                    const rank = row[2] ? row[2].replace(/['"]+/g, '').trim() : '成員';
+
+                    // 建立卡片
+                    const card = document.createElement('div');
+                    card.className = 'member-card';
+                    card.innerHTML = `
+                        <div class="member-avatar"></div>
+                        <h3 class="member-name">${name}</h3>
+                        <p class="member-title">"${title}"</p>
+                        <div class="member-rank">${rank}</div>
+                    `;
+                    membersContainer.appendChild(card);
+                }
+            }
+
+            // 執行讀取
+            fetch(sheetCsvUrl)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error(`HTTP 錯誤! 狀態碼: ${response.status}`);
+                    }
+                    return response.text();
+                })
+                .then(data => {
+                    // 檢查是不是讀到了 HTML 登入頁面 (常見錯誤)
+                    if (data.includes("<!DOCTYPE html>") || data.includes("<html")) {
+                        throw new Error("讀取到了網頁而非 CSV 資料。請檢查連結是否為「發布到網路 > CSV」格式，且試算表權限已公開。");
+                    }
+                    parseCSV(data);
+                })
+                .catch(error => {
+                    console.error('詳細錯誤:', error);
+                    const errorDiv = document.getElementById('error-msg');
+                    const container = document.getElementById('members-container');
+                    
+                    container.innerHTML = '';
+                    errorDiv.style.display = 'block';
+                    
+                    // 判斷是否為 CORS 問題 (本地檔案開啟)
+                    if (window.location.protocol === 'file:') {
+                        errorDiv.innerHTML = `
+                            <strong>讀取失敗 (CORS 限制)</strong><br>
+                            您目前是直接打開檔案 (file:///)。<br>
+                            瀏覽器安全性禁止本地檔案讀取外部資料。<br>
+                            <br>
+                            <strong>解決方案：</strong><br>
+                            1. 使用 VS Code Live Server 插件開啟。<br>
+                            2. 或將網頁上傳到 GitHub Pages / 網站空間。
+                        `;
+                    } else {
+                        errorDiv.innerHTML = `
+                            <strong>讀取失敗</strong><br>
+                            錯誤原因：${error.message}<br>
+                            <br>
+                            請按 F12 打開開發者工具 > Console 查看詳細紅字錯誤。
+                        `;
+                    }
+                });
+        </script>
+    </section>
+    <section id="dungeon" class="content-section">
+        <h2 class="section-title">百業副本車單報名</h2>
+        <div class="signup-wrapper">
+            <form action="#" method="POST"> <div class="form-group">
+                    <label for="nickname" class="form-label">❖ 俠客暱稱</label>
+                    <input type="text" id="nickname" class="form-input" placeholder="請輸入您的遊戲內暱稱" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="profession" class="form-label">❖ 主修百業</label>
+                    <select id="profession" class="form-select" required>
+                        <option value="">請選擇您的專精方向</option>
+                        <option value="鏢師">鏢師 - 護送物資</option>
+                        <option value="懸賞">懸賞 - 擊殺目標</option>
+                        <option value="遊俠">遊俠 - 探索戰鬥</option>
+                        <option value="郎中">郎中 - 懸壺濟世</option>
+                        <option value="工匠">工匠 - 裝備鍛造</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="dungeon-type" class="form-label">❖ 欲報名副本 / 活動</label>
+                    <select id="dungeon-type" class="form-select" required>
+                        <option value="">請選擇活動類型</option>
+                        <option value="hard_raid">高難度副本開荒 (需聽指揮)</option>
+                        <option value="daily_run">日常百業速刷 (休閒)</option>
+                        <option value="guild_event">公會多人大型活動</option>
+                        <option value="pvp">演武場切磋 / 幫戰</option>
+                    </select>
+                </div>
+                
+                <div class="form-group">
+                    <label for="available-time" class="form-label">❖ 方便時段與備註</label>
+                    <input type="text" id="available-time" class="form-input" placeholder="例如：平日晚上 20:00 - 23:00，戰力 5000+">
+                </div>
+
+                <button type="submit" class="submit-btn">提交報名帖</button>
+                <p style="font-size: 0.85em; color: #777; text-align: center; margin-top: 20px;">
+                    ※ 提交後請留意 Discord 或遊戲內信件通知。
+                </p>
+            </form>
+        </div>
+    </section>
+
+    <footer>
+        <p>© 2024 淡墨輕煙公會. All rights reserved.</p>
+        <p style="font-size: 0.8em; color: #444; margin-top: 10px;">燕雲十六聲玩家社群 | Designed for Wuxia RPG</p>
+    </footer>
+
+</body>
+</html>
