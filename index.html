@@ -367,6 +367,59 @@
                 padding: 20px;
             }
         }
+/* --- 音樂控制按鈕樣式 --- */
+.music-control {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background-color: rgba(10, 10, 10, 0.8);
+    border: 2px solid var(--accent-color);
+    color: var(--accent-color);
+    cursor: pointer;
+    z-index: 9999; /* 確保浮在最上層 */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    transition: all 0.3s ease;
+    box-shadow: 0 0 15px rgba(0,0,0,0.5);
+    padding: 0; /* 移除預設內距 */
+}
+
+.music-control:hover {
+    transform: scale(1.1);
+    background-color: var(--accent-color);
+    color: #0a0a0a;
+    box-shadow: 0 0 20px var(--accent-color);
+}
+
+/* 播放時的動畫效果：慢速旋轉 */
+.music-playing {
+    animation: rotateDisc 4s linear infinite;
+    background-color: rgba(199, 178, 153, 0.2); /* 播放時微亮 */
+}
+
+/* 如果音樂是暫停狀態，加上一條斜線 (可選，透過 JS 控制 class) */
+.music-paused {
+    opacity: 0.7;
+}
+
+@keyframes rotateDisc {
+    from { transform: rotate(0deg); }
+    to { transform: rotate(360deg); }
+}
+
+/* 手機版調整位置，避免擋到內容 */
+@media (max-width: 768px) {
+    .music-control {
+        bottom: 20px;
+        right: 20px;
+        width: 40px;
+        height: 40px;
+    }
+}
     </style>
 </head>
 <body>
@@ -499,6 +552,56 @@
                         `;
                     }
                 });
+// --- 背景音樂控制邏輯 (智慧自動播放版) ---
+    const audio = document.getElementById('bg-music');
+    const musicBtn = document.getElementById('music-btn');
+    
+    // 設定音量
+    audio.volume = 0.4; 
+
+    // 定義更新按鈕狀態的函式
+    function updateButtonState() {
+        if (!audio.paused) {
+            musicBtn.classList.add('music-playing');
+            musicBtn.classList.remove('music-paused');
+        } else {
+            musicBtn.classList.remove('music-playing');
+            musicBtn.classList.add('music-paused');
+        }
+    }
+
+    // 1. 嘗試自動播放
+    const playPromise = audio.play();
+
+    if (playPromise !== undefined) {
+        playPromise.then(_ => {
+            // 自動播放成功！
+            console.log("自動播放成功");
+            updateButtonState();
+        })
+        .catch(error => {
+            // 自動播放被瀏覽器擋住了
+            console.log("自動播放被攔截，等待使用者互動...");
+            // 添加一個一次性的事件監聽器：使用者點擊畫面任何地方就開始播
+            document.body.addEventListener('click', function() {
+                audio.play();
+                updateButtonState();
+            }, { once: true }); // once: true 代表只執行一次
+        });
+    }
+
+    // 2. 按鈕手動控制功能
+    musicBtn.addEventListener('click', (e) => {
+        // 阻止冒泡，避免觸發上面的 body click 事件 (雖然有 once 保護，但保險起見)
+        e.stopPropagation(); 
+
+        if (audio.paused) {
+            audio.play();
+        } else {
+            audio.pause();
+        }
+        updateButtonState();
+    });
         </script>
     </section>
     <section id="dungeon" class="content-section">
@@ -549,6 +652,14 @@
         <p>© 2024 淡墨輕煙公會. All rights reserved.</p>
         <p style="font-size: 0.8em; color: #444; margin-top: 10px;">燕雲十六聲玩家社群 | Designed for Wuxia RPG</p>
     </footer>
+<audio id="bg-music" loop autoplay>
+    <source src="music.mp3" type="audio/mp3">
+</audio>
 
+<button id="music-btn" class="music-control" title="播放/暫停音樂">
+    <svg id="music-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+        <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+    </svg>
+</button>
 </body>
 </html>
