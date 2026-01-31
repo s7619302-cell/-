@@ -11,8 +11,8 @@
             --accent-color: #c7b299; /* 淡金色 */
             --accent-hover: #e6d5c1;
             --text-color: #e0e0e0;
-            --card-bg: rgba(30, 35, 45, 0.85); /* 卡片背景微透明 */
-            --section-bg: #0f1012; /* 內容區塊深色背景 */
+            --card-bg: rgba(30, 35, 45, 0.85);
+            --section-bg: #0f1012;
         }
 
         body, html {
@@ -21,7 +21,8 @@
             font-family: 'Noto Serif TC', serif;
             background-color: var(--main-bg-color);
             color: var(--text-color);
-            scroll-behavior: smooth; /* 點擊導覽列時平滑捲動 */
+            scroll-behavior: smooth;
+            overflow-x: hidden;
         }
 
         /* --- 導覽列 --- */
@@ -81,33 +82,29 @@
             flex-direction: column;
             justify-content: center;
             align-items: center;
-            overflow: hidden; /* 防止影片溢出 */
+            overflow: hidden;
         }
 
-        /* 背景影片樣式 */
         .video-bg {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            object-fit: cover; /* 確保影片填滿畫面不變形 */
+            object-fit: cover;
             z-index: 0;
         }
 
-        /* 遮罩層：讓影片變暗，使文字更清晰 */
         .hero-overlay {
             position: absolute;
             top: 0;
             left: 0;
             width: 100%;
             height: 100%;
-            background: rgba(0, 0, 0, 0.45); 
-            z-index: 1;
             background: radial-gradient(circle, rgba(0,0,0,0.2) 0%, rgba(0,0,0,0.8) 90%);
+            z-index: 1;
         }
 
-        /* 英雄區塊內容 */
         .hero-content {
             position: relative;
             z-index: 2;
@@ -115,10 +112,9 @@
             width: 100%;
             padding: 0 20px;
             box-sizing: border-box;
-            margin-bottom: 80px; /* 稍微往上調 */
+            margin-bottom: 80px;
         }
 
-        /* 標題圖片 (書法字) */
         .main-title-img {
             max-width: 700px;
             width: 80%;
@@ -139,7 +135,7 @@
             animation: slideUp 2s ease-out;
         }
 
-        /* --- 內容區塊通用設定 --- */
+        /* --- 內容區塊 --- */
         .content-section {
             padding: 100px 10%;
             background-color: var(--section-bg);
@@ -156,7 +152,6 @@
             letter-spacing: 5px;
         }
 
-        /* 標題下方的裝飾線 */
         .section-title::after {
             content: '❖';
             display: block;
@@ -165,7 +160,6 @@
             margin-top: 15px;
         }
 
-        /* --- 公會簡介 --- */
         .intro-text {
             font-size: 1.25em;
             line-height: 2;
@@ -175,11 +169,7 @@
             color: #ccc;
         }
 
-        .intro-text p {
-            margin-bottom: 30px;
-        }
-
-        /* --- 成員介紹網格 --- */
+        /* --- 成員卡片 --- */
         .members-grid {
             display: grid;
             grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
@@ -213,11 +203,10 @@
             border-radius: 50%;
             margin: 0 auto 20px;
             border: 2px solid var(--accent-color);
-            /* 若無圖片，使用預設背景 */
-            background-image: url('data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" width="100" height="100" viewBox="0 0 24 24" fill="none" stroke="%23555" stroke-width="1" stroke-linecap="round" stroke-linejoin="round"><path d="M20 21v-2a4 4 0 0 0-4-4H8a4 4 0 0 0-4 4v2"></path><circle cx="12" cy="7" r="4"></circle></svg>');
-            background-size: 60%;
+            background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
+            /* 圖片由 JS 動態載入 */
         }
 
         .member-name {
@@ -243,16 +232,9 @@
             border-radius: 20px;
         }
 
-        .member-card:hover .member-rank {
-            border-color: var(--accent-color);
-            color: var(--accent-color);
-        }
-
         /* --- 報名表單 --- */
         .signup-wrapper {
-            background-image: linear-gradient(rgba(0,0,0,0.7), rgba(0,0,0,0.7)), url('image_0.png'); /* 若原背景圖還在，可當作表單背景，若無可刪除 */
-            background-size: cover;
-            background-position: center;
+            background: rgba(20, 20, 20, 0.8);
             padding: 50px;
             border-radius: 10px;
             max-width: 700px;
@@ -261,19 +243,9 @@
             box-shadow: 0 0 50px rgba(0,0,0,0.5);
         }
 
-        .form-group {
-            margin-bottom: 30px;
-            text-align: left;
-        }
-
-        .form-label {
-            display: block;
-            margin-bottom: 10px;
-            color: var(--accent-color);
-            font-size: 1.1em;
-            font-weight: bold;
-        }
-
+        .form-group { margin-bottom: 30px; text-align: left; }
+        .form-label { display: block; margin-bottom: 10px; color: var(--accent-color); font-weight: bold; }
+        
         .form-input, .form-select {
             width: 100%;
             padding: 15px;
@@ -282,17 +254,9 @@
             color: var(--text-color);
             border-radius: 4px;
             box-sizing: border-box;
-            font-family: inherit;
             font-size: 1em;
-            transition: border-color 0.3s;
         }
         
-        .form-input:focus, .form-select:focus {
-            outline: none;
-            border-color: var(--accent-color);
-            box-shadow: 0 0 10px rgba(199, 178, 153, 0.2);
-        }
-
         .submit-btn {
             width: 100%;
             padding: 18px;
@@ -303,123 +267,57 @@
             font-weight: bold;
             cursor: pointer;
             transition: all 0.3s;
-            font-family: inherit;
-            letter-spacing: 3px;
-            border-radius: 4px;
+        }
+        
+        .submit-btn:hover { background-color: var(--accent-hover); }
+
+        /* --- 音樂控制按鈕 --- */
+        .music-control {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background-color: rgba(10, 10, 10, 0.8);
+            border: 2px solid var(--accent-color);
+            color: var(--accent-color);
+            cursor: pointer;
+            z-index: 9999;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            transition: all 0.3s ease;
+            box-shadow: 0 0 15px rgba(0,0,0,0.5);
+            padding: 0;
         }
 
-        .submit-btn:hover {
-            background-color: var(--accent-hover);
-            transform: scale(1.02);
+        .music-control:hover {
+            transform: scale(1.1);
+            box-shadow: 0 0 20px var(--accent-color);
         }
 
-        /* --- 頁尾 --- */
-        footer {
-            background-color: #050505;
-            padding: 40px;
-            text-align: center;
-            color: #666;
-            font-size: 0.9em;
-            border-top: 1px solid #222;
+        .music-playing {
+            animation: rotateDisc 4s linear infinite;
+            background-color: rgba(199, 178, 153, 0.2);
         }
 
-        /* 動畫定義 */
-        @keyframes fadeIn {
-            from { opacity: 0; }
-            to { opacity: 1; }
-        }
-        @keyframes slideUp {
-            from { opacity: 0; transform: translateY(20px); }
-            to { opacity: 1; transform: translateY(0); }
-        }
+        .music-paused { opacity: 0.7; }
 
-        /* --- RWD 響應式調整 --- */
+        @keyframes rotateDisc {
+            from { transform: rotate(0deg); }
+            to { transform: rotate(360deg); }
+        }
+        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
+        @keyframes slideUp { from { opacity: 0; transform: translateY(20px); } to { opacity: 1; transform: translateY(0); } }
+
+        /* RWD */
         @media (max-width: 768px) {
-            header {
-                padding: 15px 20px;
-                flex-direction: column;
-            }
-            
-            nav ul {
-                margin-top: 15px;
-                gap: 15px;
-                font-size: 0.9em;
-            }
-
-            .main-title-img {
-                width: 95%;
-            }
-
-            .hero-subtitle {
-                font-size: 1.2em;
-                letter-spacing: 3px;
-            }
-
-            .section-title {
-                font-size: 2em;
-            }
-
-            .content-section {
-                padding: 60px 5%;
-            }
-
-            .signup-wrapper {
-                padding: 20px;
-            }
+            header { padding: 15px; flex-direction: column; }
+            nav ul { margin-top: 15px; gap: 15px; font-size: 0.9em; }
+            .hero-subtitle { font-size: 1.2em; }
+            .content-section { padding: 60px 5%; }
         }
-/* --- 音樂控制按鈕樣式 --- */
-.music-control {
-    position: fixed;
-    bottom: 30px;
-    right: 30px;
-    width: 50px;
-    height: 50px;
-    border-radius: 50%;
-    background-color: rgba(10, 10, 10, 0.8);
-    border: 2px solid var(--accent-color);
-    color: var(--accent-color);
-    cursor: pointer;
-    z-index: 9999; /* 確保浮在最上層 */
-    display: flex;
-    justify-content: center;
-    align-items: center;
-    transition: all 0.3s ease;
-    box-shadow: 0 0 15px rgba(0,0,0,0.5);
-    padding: 0; /* 移除預設內距 */
-}
-
-.music-control:hover {
-    transform: scale(1.1);
-    background-color: var(--accent-color);
-    color: #0a0a0a;
-    box-shadow: 0 0 20px var(--accent-color);
-}
-
-/* 播放時的動畫效果：慢速旋轉 */
-.music-playing {
-    animation: rotateDisc 4s linear infinite;
-    background-color: rgba(199, 178, 153, 0.2); /* 播放時微亮 */
-}
-
-/* 如果音樂是暫停狀態，加上一條斜線 (可選，透過 JS 控制 class) */
-.music-paused {
-    opacity: 0.7;
-}
-
-@keyframes rotateDisc {
-    from { transform: rotate(0deg); }
-    to { transform: rotate(360deg); }
-}
-
-/* 手機版調整位置，避免擋到內容 */
-@media (max-width: 768px) {
-    .music-control {
-        bottom: 20px;
-        right: 20px;
-        width: 40px;
-        height: 40px;
-    }
-}
     </style>
 </head>
 <body>
@@ -429,21 +327,18 @@
         <nav>
             <ul>
                 <li><a href="#hero">首頁</a></li>
-                <li><a href="#intro">公會簡介</a></li>
-                <li><a href="#members">俠客名冊</a></li>
-                <li><a href="#dungeon">副本報名</a></li>
+                <li><a href="#intro">簡介</a></li>
+                <li><a href="#members">名冊</a></li>
+                <li><a href="#dungeon">報名</a></li>
             </ul>
         </nav>
     </header>
 
     <section id="hero" class="hero-banner">
-        <video class="video-bg" autoplay muted loop playsinline poster="">
+        <video class="video-bg" autoplay muted loop playsinline>
             <source src="bg_video.mp4" type="video/mp4">
-            您的瀏覽器不支援影片標籤，建議使用 Chrome 或 Edge 瀏覽。
         </video>
-
         <div class="hero-overlay"></div>
-
         <div class="hero-content">
             <img src="image_1.png" alt="淡墨輕煙" class="main-title-img">
             <h2 class="hero-subtitle">以武會友，快意江湖</h2>
@@ -454,8 +349,8 @@
         <h2 class="section-title">公會簡介</h2>
         <div class="intro-text">
             <p>「淡墨輕煙」，取自江湖之遠，非淡泊無以明志，非寧靜無以致遠。<br>我們匯聚四方俠客，不問出身，只求志同道合。</p>
-            <p>在這裡，我們共闖百業副本，研習武學，亦或是在燕雲大地策馬奔騰，共賞長河落日。<br>我們重視每一位成員的體驗，互助互信，共同譜寫屬於我們的江湖傳奇。</p>
-            <p style="color: var(--accent-color); font-weight: bold; font-size: 1.2em; margin-top: 40px;">
+            <p>在這裡，我們共闖百業副本，研習武學，亦或是在燕雲大地策馬奔騰，共賞長河落日。</p>
+            <p style="color: var(--accent-color); font-weight: bold; margin-top: 40px;">
                 劍起江湖嘯恩仇，墨染輕煙畫春秋。
             </p>
         </div>
@@ -463,204 +358,198 @@
 
     <section id="members" class="content-section">
         <h2 class="section-title">俠客名冊</h2>
-        
         <div id="members-container" class="members-grid">
             <p style="text-align:center; width:100%; color:#888;">正在聯繫江湖探子獲取名冊...</p>
         </div>
-
-        <div id="error-msg" style="color: #ff6b6b; text-align: center; margin-top: 20px; display: none; background: rgba(0,0,0,0.8); padding: 15px; border: 1px solid red;"></div>
-
-        <script>
-            // ★★★ 請務必確認這裡換成了「發布到網路」的 CSV 連結 ★★★
-            // 連結結尾通常是 output=csv
-            const sheetCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT_zToofqTDRekqbDrXa4zxokGNBymqHmshOA0MzmLmxXvD7LSuzqpCoeAtcmRujwdXb_IEKCfSriIC/pub?gid=0&single=true&output=csv'; 
-
-            function parseCSV(str) {
-                const rows = str.trim().split(/\r?\n/); // 兼容不同系統的換行符號
-                const membersContainer = document.getElementById('members-container');
-                membersContainer.innerHTML = ''; 
-
-                console.log("讀取到的行數:", rows.length); // 除錯用
-
-                // 從第 1 筆開始 (跳過標題)
-                for (let i = 1; i < rows.length; i++) {
-                    // 處理逗號分隔，但忽略引號內的逗號 (更強大的分割法)
-                    // 如果這行太複雜，暫時假設沒有逗號在名字裡
-                    const row = rows[i].split(',');
-
-                    if (row.length < 2) continue;
-
-                    // 欄位對應 (請依據您的試算表調整數字 0, 1, 2)
-                    // 0 = A欄, 1 = B欄, 2 = C欄
-                    const name = row[0] ? row[0].replace(/['"]+/g, '').trim() : '未命名';
-                    const title = row[1] ? row[1].replace(/['"]+/g, '').trim() : '無稱號';
-                    const rank = row[2] ? row[2].replace(/['"]+/g, '').trim() : '成員';
-
-                    // 建立卡片
-                    const card = document.createElement('div');
-                    card.className = 'member-card';
-                    card.innerHTML = `
-                        <div class="member-avatar"></div>
-                        <h3 class="member-name">${name}</h3>
-                        <p class="member-title">"${title}"</p>
-                        <div class="member-rank">${rank}</div>
-                    `;
-                    membersContainer.appendChild(card);
-                }
-            }
-
-            // 執行讀取
-            fetch(sheetCsvUrl)
-                .then(response => {
-                    if (!response.ok) {
-                        throw new Error(`HTTP 錯誤! 狀態碼: ${response.status}`);
-                    }
-                    return response.text();
-                })
-                .then(data => {
-                    // 檢查是不是讀到了 HTML 登入頁面 (常見錯誤)
-                    if (data.includes("<!DOCTYPE html>") || data.includes("<html")) {
-                        throw new Error("讀取到了網頁而非 CSV 資料。請檢查連結是否為「發布到網路 > CSV」格式，且試算表權限已公開。");
-                    }
-                    parseCSV(data);
-                })
-                .catch(error => {
-                    console.error('詳細錯誤:', error);
-                    const errorDiv = document.getElementById('error-msg');
-                    const container = document.getElementById('members-container');
-                    
-                    container.innerHTML = '';
-                    errorDiv.style.display = 'block';
-                    
-                    // 判斷是否為 CORS 問題 (本地檔案開啟)
-                    if (window.location.protocol === 'file:') {
-                        errorDiv.innerHTML = `
-                            <strong>讀取失敗 (CORS 限制)</strong><br>
-                            您目前是直接打開檔案 (file:///)。<br>
-                            瀏覽器安全性禁止本地檔案讀取外部資料。<br>
-                            <br>
-                            <strong>解決方案：</strong><br>
-                            1. 使用 VS Code Live Server 插件開啟。<br>
-                            2. 或將網頁上傳到 GitHub Pages / 網站空間。
-                        `;
-                    } else {
-                        errorDiv.innerHTML = `
-                            <strong>讀取失敗</strong><br>
-                            錯誤原因：${error.message}<br>
-                            <br>
-                            請按 F12 打開開發者工具 > Console 查看詳細紅字錯誤。
-                        `;
-                    }
-                });
-// --- 背景音樂控制邏輯 (智慧自動播放版) ---
-    const audio = document.getElementById('bg-music');
-    const musicBtn = document.getElementById('music-btn');
-    
-    // 設定音量
-    audio.volume = 1; 
-
-    // 定義更新按鈕狀態的函式
-    function updateButtonState() {
-        if (!audio.paused) {
-            musicBtn.classList.add('music-playing');
-            musicBtn.classList.remove('music-paused');
-        } else {
-            musicBtn.classList.remove('music-playing');
-            musicBtn.classList.add('music-paused');
-        }
-    }
-
-    // 1. 嘗試自動播放
-    const playPromise = audio.play();
-
-    if (playPromise !== undefined) {
-        playPromise.then(_ => {
-            // 自動播放成功！
-            console.log("自動播放成功");
-            updateButtonState();
-        })
-        .catch(error => {
-            // 自動播放被瀏覽器擋住了
-            console.log("自動播放被攔截，等待使用者互動...");
-            // 添加一個一次性的事件監聽器：使用者點擊畫面任何地方就開始播
-            document.body.addEventListener('click', function() {
-                audio.play();
-                updateButtonState();
-            }, { once: true }); // once: true 代表只執行一次
-        });
-    }
-
-    // 2. 按鈕手動控制功能
-    musicBtn.addEventListener('click', (e) => {
-        // 阻止冒泡，避免觸發上面的 body click 事件 (雖然有 once 保護，但保險起見)
-        e.stopPropagation(); 
-
-        if (audio.paused) {
-            audio.play();
-        } else {
-            audio.pause();
-        }
-        updateButtonState();
-    });
-        </script>
+        <div id="status-msg" style="text-align: center; margin-top: 20px; font-size: 0.9em; color: #666;"></div>
     </section>
+
     <section id="dungeon" class="content-section">
         <h2 class="section-title">百業副本車單報名</h2>
         <div class="signup-wrapper">
-            <form action="#" method="POST"> <div class="form-group">
-                    <label for="nickname" class="form-label">❖ 俠客暱稱</label>
-                    <input type="text" id="nickname" class="form-input" placeholder="請輸入您的遊戲內暱稱" required>
-                </div>
-
+            <form action="#"> 
                 <div class="form-group">
-                    <label for="profession" class="form-label">❖ 主修百業</label>
-                    <select id="profession" class="form-select" required>
-                        <option value="">請選擇您的專精方向</option>
-                        <option value="鏢師">鏢師 - 護送物資</option>
-                        <option value="懸賞">懸賞 - 擊殺目標</option>
-                        <option value="遊俠">遊俠 - 探索戰鬥</option>
-                        <option value="郎中">郎中 - 懸壺濟世</option>
-                        <option value="工匠">工匠 - 裝備鍛造</option>
+                    <label class="form-label">❖ 俠客暱稱</label>
+                    <input type="text" class="form-input" placeholder="請輸入您的遊戲內暱稱" required>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">❖ 主修百業</label>
+                    <select class="form-select" required>
+                        <option value="">請選擇</option>
+                        <option value="鏢師">鏢師</option>
+                        <option value="懸賞">懸賞</option>
+                        <option value="遊俠">遊俠</option>
+                        <option value="郎中">郎中</option>
+                        <option value="工匠">工匠</option>
                     </select>
                 </div>
-
                 <div class="form-group">
-                    <label for="dungeon-type" class="form-label">❖ 欲報名副本 / 活動</label>
-                    <select id="dungeon-type" class="form-select" required>
-                        <option value="">請選擇活動類型</option>
-                        <option value="hard_raid">高難度副本開荒 (需聽指揮)</option>
-                        <option value="daily_run">日常百業速刷 (休閒)</option>
-                        <option value="guild_event">公會多人大型活動</option>
-                        <option value="pvp">演武場切磋 / 幫戰</option>
+                    <label class="form-label">❖ 報名項目</label>
+                    <select class="form-select" required>
+                        <option value="">請選擇</option>
+                        <option value="hard">高難度副本開荒</option>
+                        <option value="daily">日常百業速刷</option>
+                        <option value="event">公會活動</option>
                     </select>
                 </div>
-                
                 <div class="form-group">
-                    <label for="available-time" class="form-label">❖ 方便時段與備註</label>
-                    <input type="text" id="available-time" class="form-input" placeholder="例如：平日晚上 20:00 - 23:00，戰力 5000+">
+                    <label class="form-label">❖ 備註</label>
+                    <input type="text" class="form-input" placeholder="方便時間 / 戰力備註">
                 </div>
-
                 <button type="submit" class="submit-btn">提交報名帖</button>
-                <p style="font-size: 0.85em; color: #777; text-align: center; margin-top: 20px;">
-                    ※ 提交後請留意 Discord 或遊戲內信件通知。
-                </p>
             </form>
         </div>
     </section>
 
     <footer>
         <p>© 2024 淡墨輕煙公會. All rights reserved.</p>
-        <p style="font-size: 0.8em; color: #444; margin-top: 10px;">燕雲十六聲玩家社群 | Designed for Wuxia RPG</p>
     </footer>
-<audio id="bg-music" loop autoplay>
-    <source src="music.mp3" type="audio/mp3">
-</audio>
 
-<button id="music-btn" class="music-control" title="播放/暫停音樂">
-    <svg id="music-icon" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
-        <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
-    </svg>
-</button>
+    <audio id="bg-music" loop autoplay>
+        <source src="music.mp3" type="audio/mp3">
+    </audio>
+
+    <button id="music-btn" class="music-control" title="播放/暫停音樂">
+        <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="currentColor" width="24" height="24">
+            <path d="M12 3v10.55c-.59-.34-1.27-.55-2-.55-2.21 0-4 1.79-4 4s1.79 4 4 4 4-1.79 4-4V7h4V3h-6z"/>
+        </svg>
+    </button>
+
+    <script>
+        /* ----------------------------------------------------
+           PART 1: 成員名冊邏輯 (Google Sheet CSV + Avatar Map)
+           ---------------------------------------------------- */
+        
+        // ★ 請在這裡貼上您「發布到網路 -> CSV」的連結
+        const sheetCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT_zToofqTDRekqbDrXa4zxokGNBymqHmshOA0MzmLmxXvD7LSuzqpCoeAtcmRujwdXb_IEKCfSriIC/pub?gid=0&single=true&output=csv'; 
+
+        // ★ 位階與圖片對照表
+        const avatarMap = {
+            "社主": "rank_01.jpg",
+            "副社主": "rank_02.jpg",
+            "指揮": "rank_03.jpg",
+            "半步演員": "rank_04.jpg",
+            "傲霜": "rank_05.jpg",
+            "築影": "rank_06.jpg",
+            "綴星": "rank_07.jpg",
+            "戮血": "rank_08.jpg",
+            "社眾": "rank_09.jpg",
+            "學徒": "rank_10.jpg"
+        };
+        const defaultAvatar = "default_user.jpg";
+
+        // 取得對應圖片
+        function getAvatarImage(rankText) {
+            if (!rankText) return defaultAvatar;
+            for (const [key, img] of Object.entries(avatarMap)) {
+                if (rankText.includes(key)) return img;
+            }
+            return defaultAvatar;
+        }
+
+        // 建立卡片 HTML
+        function createCard(name, title, rank) {
+            const img = getAvatarImage(rank);
+            return `
+                <div class="member-card">
+                    <div class="member-avatar" style="background-image: url('${img}');"></div>
+                    <h3 class="member-name">${name}</h3>
+                    <p class="member-title">"${title}"</p>
+                    <div class="member-rank">${rank}</div>
+                </div>`;
+        }
+
+        // 備用資料 (當讀取失敗或 CORS 擋住時顯示)
+        function loadFallbackData(reason) {
+            const container = document.getElementById('members-container');
+            const statusDiv = document.getElementById('status-msg');
+            
+            const fallbackMembers = [
+                {name: "墨染初", title: "一劍霜寒十四州", rank: "幫主"},
+                {name: "靈均", title: "舉世皆濁我獨清", rank: "副幫主"},
+                {name: "予諾", title: "一諾千金", rank: "領隊"},
+                {name: "張沐秋", title: "神槍無敵", rank: "正式成員"},
+                {name: "月下獨酌", title: "醉臥沙場", rank: "精英成員"}
+            ];
+
+            let html = '';
+            fallbackMembers.forEach(m => html += createCard(m.name, m.title, m.rank));
+            container.innerHTML = html;
+            
+            statusDiv.innerHTML = `(目前顯示為測試資料，原因: ${reason})`;
+            statusDiv.style.display = 'block';
+        }
+
+        // 執行讀取
+        fetch(sheetCsvUrl)
+            .then(res => {
+                if(!res.ok) throw new Error("HTTP Error");
+                return res.text();
+            })
+            .then(data => {
+                if(data.includes("<html")) throw new Error("Not CSV");
+                
+                const rows = data.trim().split(/\r?\n/);
+                const container = document.getElementById('members-container');
+                container.innerHTML = '';
+                
+                // 從 index 1 開始 (跳過標題)
+                for(let i=1; i<rows.length; i++) {
+                    const row = rows[i].split(',');
+                    if(row.length < 2) continue;
+                    
+                    const name = row[0].replace(/['"]+/g, '').trim();
+                    const title = row[1].replace(/['"]+/g, '').trim();
+                    const rank = row[2].replace(/['"]+/g, '').trim();
+                    
+                    container.innerHTML += createCard(name, title, rank);
+                }
+            })
+            .catch(err => {
+                console.warn("讀取失敗，切換至備用資料:", err);
+                let reason = "網路問題或連結錯誤";
+                if(window.location.protocol === 'file:') reason = "CORS 限制 (請使用 Live Server 或上傳網站)";
+                loadFallbackData(reason);
+            });
+
+        /* ----------------------------------------------------
+           PART 2: 背景音樂邏輯 (智慧自動播放)
+           ---------------------------------------------------- */
+        const audio = document.getElementById('bg-music');
+        const musicBtn = document.getElementById('music-btn');
+        audio.volume = 0.4;
+
+        function updateBtn() {
+            if(!audio.paused) {
+                musicBtn.classList.add('music-playing');
+                musicBtn.classList.remove('music-paused');
+            } else {
+                musicBtn.classList.remove('music-playing');
+                musicBtn.classList.add('music-paused');
+            }
+        }
+
+        // 嘗試自動播放
+        audio.play().then(() => {
+            console.log("Auto-play success");
+            updateBtn();
+        }).catch(() => {
+            console.log("Auto-play blocked, waiting for interaction");
+            // 等待使用者第一次點擊
+            document.body.addEventListener('click', () => {
+                audio.play();
+                updateBtn();
+            }, { once: true });
+        });
+
+        // 按鈕手動控制
+        musicBtn.addEventListener('click', (e) => {
+            e.stopPropagation();
+            if(audio.paused) audio.play();
+            else audio.pause();
+            updateBtn();
+        });
+
+    </script>
 </body>
 </html>
-
