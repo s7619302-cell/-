@@ -318,6 +318,29 @@
             .hero-subtitle { font-size: 1.2em; }
             .content-section { padding: 60px 5%; }
         }
+        /* --- 俠客名冊專屬背景設定 --- */
+        #members {
+            /* 這一行有兩個圖層：
+               1. linear-gradient: 半透明黑色遮罩 (0.8 代表 80% 黑)，讓文字更清楚
+               2. url: 您的背景圖片路徑 
+            */
+            background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('roster_bg.jpg');
+            
+            /* 讓背景圖填滿整個區塊 */
+            background-size: cover;
+            
+            /* 讓背景圖居中 */
+            background-position: center;
+            
+            /* (選用) 視差滾動效果：
+               加上 fixed 這行，滾動網頁時背景會固定不動，看起來很有質感。
+               如果不喜歡，可以把這行刪掉。
+            */
+            background-attachment: fixed;
+            
+            /* 確保文字顏色是亮的 */
+            color: #ffffff;
+        }
     </style>
 </head>
 <body>
@@ -553,3 +576,4 @@
     </script>
 </body>
 </html>
+
