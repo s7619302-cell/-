@@ -73,7 +73,7 @@
             color: var(--accent-color);
         }
 
-        /* --- 主視覺區塊 (Video Background) --- */
+        /* --- 主視覺區塊 --- */
         .hero-banner {
             height: 100vh;
             width: 100%;
@@ -135,12 +135,22 @@
             animation: slideUp 2s ease-out;
         }
 
-        /* --- 內容區塊 --- */
+        /* --- 內容區塊通用設定 --- */
         .content-section {
             padding: 100px 10%;
             background-color: var(--section-bg);
             border-top: 1px solid #333;
             position: relative;
+        }
+
+        /* ★★★ 新增：俠客名冊專屬背景 ★★★ */
+        #members {
+            /* 這裡設定背景圖片 roster_bg.jpg，並疊加一層 80% 黑色的遮罩 */
+            background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('roster_bg.jpg');
+            background-size: cover;
+            background-position: center;
+            background-attachment: fixed; /* 視差滾動效果 */
+            color: #ffffff;
         }
 
         .section-title {
@@ -206,7 +216,6 @@
             background-size: cover;
             background-position: center;
             background-repeat: no-repeat;
-            /* 圖片由 JS 動態載入 */
         }
 
         .member-name {
@@ -318,29 +327,6 @@
             .hero-subtitle { font-size: 1.2em; }
             .content-section { padding: 60px 5%; }
         }
-        /* --- 俠客名冊專屬背景設定 --- */
-        #members {
-            /* 這一行有兩個圖層：
-               1. linear-gradient: 半透明黑色遮罩 (0.8 代表 80% 黑)，讓文字更清楚
-               2. url: 您的背景圖片路徑 
-            */
-            background-image: linear-gradient(rgba(0, 0, 0, 0.8), rgba(0, 0, 0, 0.8)), url('roster_bg.jpg');
-            
-            /* 讓背景圖填滿整個區塊 */
-            background-size: cover;
-            
-            /* 讓背景圖居中 */
-            background-position: center;
-            
-            /* (選用) 視差滾動效果：
-               加上 fixed 這行，滾動網頁時背景會固定不動，看起來很有質感。
-               如果不喜歡，可以把這行刪掉。
-            */
-            background-attachment: fixed;
-            
-            /* 確保文字顏色是亮的 */
-            color: #ffffff;
-        }
     </style>
 </head>
 <body>
@@ -439,14 +425,10 @@
     </button>
 
     <script>
-        /* ----------------------------------------------------
-           PART 1: 成員名冊邏輯 (Google Sheet CSV + Avatar Map)
-           ---------------------------------------------------- */
-        
-        // ★ 請在這裡貼上您「發布到網路 -> CSV」的連結
-        const sheetCsvUrl = 'https://docs.google.com/spreadsheets/d/e/2PACX-1vT_zToofqTDRekqbDrXa4zxokGNBymqHmshOA0MzmLmxXvD7LSuzqpCoeAtcmRujwdXb_IEKCfSriIC/pub?gid=0&single=true&output=csv'; 
+        // ★★★ 請務必確認這裡的網址已填上，且前後有單引號 ★★★
+        const sheetCsvUrl = '您的_GOOGLE_SHEET_CSV_連結'; 
 
-        // ★ 位階與圖片對照表
+        // ★★★ 注意：這裡的圖片檔名全部改為 jpg 了 ★★★
         const avatarMap = {
             "社主": "rank_01.jpg",
             "副社主": "rank_02.jpg",
@@ -459,6 +441,7 @@
             "社眾": "rank_09.jpg",
             "學徒": "rank_10.jpg"
         };
+        // ★★★ 預設圖也改為 jpg ★★★
         const defaultAvatar = "default_user.jpg";
 
         // 取得對應圖片
@@ -482,7 +465,7 @@
                 </div>`;
         }
 
-        // 備用資料 (當讀取失敗或 CORS 擋住時顯示)
+        // 備用資料 (當讀取失敗時)
         function loadFallbackData(reason) {
             const container = document.getElementById('members-container');
             const statusDiv = document.getElementById('status-msg');
@@ -516,7 +499,6 @@
                 const container = document.getElementById('members-container');
                 container.innerHTML = '';
                 
-                // 從 index 1 開始 (跳過標題)
                 for(let i=1; i<rows.length; i++) {
                     const row = rows[i].split(',');
                     if(row.length < 2) continue;
@@ -529,15 +511,13 @@
                 }
             })
             .catch(err => {
-                console.warn("讀取失敗，切換至備用資料:", err);
+                console.warn("讀取失敗:", err);
                 let reason = "網路問題或連結錯誤";
-                if(window.location.protocol === 'file:') reason = "CORS 限制 (請使用 Live Server 或上傳網站)";
+                if(window.location.protocol === 'file:') reason = "CORS 限制 (請使用 Live Server)";
                 loadFallbackData(reason);
             });
 
-        /* ----------------------------------------------------
-           PART 2: 背景音樂邏輯 (智慧自動播放)
-           ---------------------------------------------------- */
+        /* 音樂邏輯 */
         const audio = document.getElementById('bg-music');
         const musicBtn = document.getElementById('music-btn');
         audio.volume = 0.4;
@@ -552,20 +532,15 @@
             }
         }
 
-        // 嘗試自動播放
         audio.play().then(() => {
-            console.log("Auto-play success");
             updateBtn();
         }).catch(() => {
-            console.log("Auto-play blocked, waiting for interaction");
-            // 等待使用者第一次點擊
             document.body.addEventListener('click', () => {
                 audio.play();
                 updateBtn();
             }, { once: true });
         });
 
-        // 按鈕手動控制
         musicBtn.addEventListener('click', (e) => {
             e.stopPropagation();
             if(audio.paused) audio.play();
@@ -576,4 +551,3 @@
     </script>
 </body>
 </html>
-
